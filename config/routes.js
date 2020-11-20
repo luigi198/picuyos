@@ -28,6 +28,9 @@ module.exports = function(app, db) {
 //     res.sendFile(path.join(__dirname, '../public', 'invitados.html'));
 //   });
 
+	app.post('/approve', api.approve);
+	app.post('/reject', api.reject);
+
   	// index
 	app.get('/', function(req, res) {
 		res.sendFile(path.join(__dirname, '../public', 'index.html'));

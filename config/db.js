@@ -12,14 +12,26 @@ console.log(DBConnectionString);
 
 module.exports = {
 	createConnection: function () {    
-		return MongoClient.connect(DBConnectionString, {
-			promiseLibrary: Promise
+		return new Promise(function (resolve, reject) {
+			MongoClient.connect(DBConnectionString, function(err, client) {
+				if (err) reject();
+				databaseConnection = client.db('anne-will-wedding');
+				resolve();
+			});
 		});
-	},
-	setupConnection: function (db) {
-		databaseConnection = db;
 	},
 	getConnection: function () {
 		return databaseConnection;
 	}
 };
+
+// let MongoClient = require('mongodb').MongoClient;
+// MongoClient.connect('mongodb://localhost:27017', function(err, client){
+//   if(err) throw err;
+//   let db = client.db('myTestingDb');
+//   db.collection('customers').find().toArray(function(err, result){
+//     if(err) throw err;
+//     console.log(result);
+//     client.close();
+//     });
+//  });
