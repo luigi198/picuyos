@@ -25,13 +25,13 @@ var encodeFileToBase64 = function (file) {
 	// read binary data
     var bitmap = fs.readFileSync(file);
     // convert binary data to base64 encoded string
-    return new Buffer(bitmap).toString('base64');
+    return Buffer.from(bitmap).toString('base64');
 };
 
-var sendInvitationList = function (path, confirmados, total, to) {
+var sendInvitationList = function (path) {
 	return new Promise(function (resolve, reject) {
 		var emailBody = getTemplate();
-		emailBody.to[to] = to;
+		emailBody.to['annemarie.ramirez@gmail.com'] = 'annemarie.ramirez@gmail.com';
 		emailBody.from.push('lcordoba@admicondo.com');
 		emailBody.from.push('Luis Córdoba');
 		emailBody.subject = 'Lista de Invitados';

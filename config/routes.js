@@ -23,13 +23,14 @@ module.exports = function(app, db) {
 //   app.post('/addGuest', api.addGuest);
 //   app.post('/removeGuest', api.removeGuest);
   
-//   // Listado de invitados
-//   app.get('/lista', function (req, res) {
-//     res.sendFile(path.join(__dirname, '../public', 'invitados.html'));
-//   });
+  // Listado de invitados
+	app.get('/lista', function (req, res) {
+		res.sendFile(path.join(__dirname, '../public', 'invitados.html'));
+	});
 
 	app.post('/approve', api.approve);
 	app.post('/reject', api.reject);
+	app.post('/send-list', api.sendList);
 
   	// index
 	app.get('/', function(req, res) {

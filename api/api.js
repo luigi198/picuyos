@@ -92,6 +92,53 @@ module.exports = {
 				responses.errorResponse(res, e);
 			});
 
+	},
+
+	sendList: function (req, res) {
+
+		if (!req.body || !req.body.password || req.body.password === '') {
+			return responses.customErrorResponse(res, 604);
+		} else if (req.body.password !== process.env.GET_LIST_PASSWORD) {
+			return responses.customErrorResponse(res, 605);
+		}
+
+		if (!req.body || req.body.honeyPot !== '') {
+			return responses.customErrorResponse(res, 602);
+		}
+
+		req.db.collection('Invitado').find().toArray()
+			.then(function (guests) {
+				return new Promise(function (resolve, reject) {
+					var model = mongoXlsx.buildDynamicModel(guests);
+					mongoXlsx.mongoData2Xlsx(guests, model, function(err, data) {
+						if (err) {
+							  return reject(err);
+						}
+						return resolve(data.fullPath);
+					});
+				});
+			})
+			.then(function (urlPath) {
+				return mail.sendInvitationList(urlPath);
+			})
+			.then(function (fullPath) {
+				return new Promise(function (resolve, reject) {
+					fs.unlink(fullPath, function (err) {
+						if (err) {
+							return reject(err);
+						}
+				
+						return resolve();
+					});
+				});
+			}).then(function () {
+				responses.successResponse(res, {'success': true});
+			})
+			.catch(function (e) {
+				console.error(e);
+				responses.errorResponse(res, e);
+			});
+
 	}
 
 };

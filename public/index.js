@@ -1,12 +1,12 @@
 
 var message = document.getElementsByClassName('pcy-message')[0];
 
-if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+if (message && (window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
 	message.style.visibility = "hidden";
 }
 
 window.onscroll = function(ev) {
-    if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+    if (message && (window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
         message.style.visibility = "hidden";
     } else {
 		message.style.visibility = "visible";
@@ -14,7 +14,7 @@ window.onscroll = function(ev) {
 };
 
 window.onresize = function(event) {
-    if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+    if (message && (window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
         message.style.visibility = "hidden";
     } else {
 		message.style.visibility = "visible";
@@ -51,7 +51,23 @@ var checkForm = function () {
 	}
 };
 
+var captchaApproved = false;
+var captcha = function() {
+    captchaApproved = true;
+};
+var captchaExpire = function () {
+	captchaApproved = false;
+};
+var captchaError = function () {
+	captchaApproved = false;
+};
+
 var reject = function () {
+
+	if (!captchaApproved) {
+		alert('Buen intento robot!');
+		return;
+	}
 
 	if (!checkForm()) {
 		alert('Todos los espacios son requeridos');
@@ -87,6 +103,11 @@ var reject = function () {
 
 var approve = function () {
 
+	if (!captchaApproved) {
+		alert('Buen intento robot!');
+		return;
+	}
+
 	if (!checkForm()) {
 		alert('Todos los espacios son requeridos');
 		return;
@@ -115,4 +136,54 @@ var approve = function () {
 	xhttp.open("POST", "/approve", false);
 	xhttp.setRequestHeader("Content-type", "application/json");
 	xhttp.send(JSON.stringify(guest));
+};
+
+var getFormValuesList = function () {
+	return {
+		password: document.getElementById('password').value,
+		honeyPot: document.getElementById('poot').value
+	};
+};
+
+var checkFormList = function () {
+	var guest = getFormValuesList();
+	if (guest.password === '' || guest.honeyPot !== '') {
+		return false;
+	} else {
+		return true;
+	}
+};
+
+var sendList = function () {
+	if (!captchaApproved) {
+		alert('Buen intento robot!');
+		return;
+	}
+
+	if (!checkFormList()) {
+		alert('Todos los espacios son requeridos');
+		return;
+	}
+	var listAuth = getFormValuesList();
+	showHideSpinner(true);
+	console.log(listAuth);
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		var response = JSON.parse(this.response);
+		if (this.readyState == 4 && this.status == 200) {
+			if (response.success) {
+				alert('Lista Enviada!');
+			} else {
+				alert('Hubo un error, por favor trate más tarde');
+			}
+		} else if (this.status >= 600) {
+			alert(response.errMsg);
+		}
+
+		showHideSpinner(false);
+	};
+	xhttp.open("POST", "/send-list", false);
+	xhttp.setRequestHeader("Content-type", "application/json");
+	xhttp.send(JSON.stringify(listAuth));
 };

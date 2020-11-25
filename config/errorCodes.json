@@ -4,6 +4,8 @@
 		"600": "No Nombre",
 		"601": "No Apellido",
 		"602": "Error Bot",
-		"603": "Invitado no encontrado"
+		"603": "Invitado no encontrado",
+		"604": "No Password",
+		"605": "Password equivocado"
 	}
 }
