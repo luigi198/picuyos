@@ -5,7 +5,7 @@ var response = {
     res.status(200).json(jsonData);
   },
   errorResponse: function (res, jsonData) {
-    res.status(500).json(jsonData);
+    res.status(200).json(jsonData);
   },
   customErrorResponse: function (res, errNum) {
     var obj = {'errMsg': errorsJson.ErrorCodes[errNum]};

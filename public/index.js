@@ -81,7 +81,9 @@ var reject = function () {
 	
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
+
 			var response = JSON.parse(this.response);
+
 			if (this.readyState == 4 && this.status == 200) {
 				if (response.success) {
 					$('#confirmation').modal('hide');
@@ -90,10 +92,13 @@ var reject = function () {
 					alert('Hubo un error, por favor trate más tarde');
 				}
 			} else if (this.status >= 600) {
-				alert(response.errMsg);
+				alert('Error: ' + response.errMsg);
 			}
 	
 			showHideSpinner(false);
+		};
+		xhttp.onerror = function () {
+			alert('Hubo un error, por favor revise su internet o contacte a Anne');
 		};
 		xhttp.open("POST", "/reject", false);
 		xhttp.setRequestHeader("Content-type", "application/json");
@@ -119,7 +124,10 @@ var approve = function () {
 
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
-		var response = JSON.parse(this.response);
+		var response;
+
+		response = JSON.parse(this.response);
+
 		if (this.readyState == 4 && this.status == 200) {
 			if (response.success) {
 				$('#confirmation').modal('hide');
@@ -128,10 +136,14 @@ var approve = function () {
 				alert('Hubo un error, por favor trate más tarde');
 			}
 		} else if (this.status >= 600) {
-			alert(response.errMsg);
+			alert('Error: ' + response.errMsg);
 		}
 
 		showHideSpinner(false);
+	};
+
+	xhttp.onerror = function () {
+		alert('Hubo un error, por favor revise su internet o contacte a Anne');
 	};
 	xhttp.open("POST", "/approve", false);
 	xhttp.setRequestHeader("Content-type", "application/json");
@@ -166,11 +178,12 @@ var sendList = function () {
 	}
 	var listAuth = getFormValuesList();
 	showHideSpinner(true);
-	console.log(listAuth);
 
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
+
 		var response = JSON.parse(this.response);
+
 		if (this.readyState == 4 && this.status == 200) {
 			if (response.success) {
 				alert('Lista Enviada!');
@@ -178,10 +191,13 @@ var sendList = function () {
 				alert('Hubo un error, por favor trate más tarde');
 			}
 		} else if (this.status >= 600) {
-			alert(response.errMsg);
+			alert('Error: ' + response.errMsg);
 		}
 
 		showHideSpinner(false);
+	};
+	xhttp.onerror = function () {
+		alert('Hubo un error, por favor revise su internet o contacte a Anne');
 	};
 	xhttp.open("POST", "/send-list", false);
 	xhttp.setRequestHeader("Content-type", "application/json");

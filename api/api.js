@@ -51,7 +51,11 @@ module.exports = {
 			})
 			.catch(function (e) {
 				console.error(e);
-				responses.errorResponse(res, e);
+				if (typeof e.code !== 'undefined') {
+					responses.customErrorResponse(res, e.code);
+				} else {
+					responses.errorResponse(res, e);
+				}
 			});
 
 	},
@@ -89,7 +93,11 @@ module.exports = {
 			})
 			.catch(function (e) {
 				console.error(e);
-				responses.errorResponse(res, e);
+				if (typeof e.code !== 'undefined') {
+					responses.customErrorResponse(res, e.code);
+				} else {
+					responses.errorResponse(res, e);
+				}
 			});
 
 	},
@@ -136,7 +144,11 @@ module.exports = {
 			})
 			.catch(function (e) {
 				console.error(e);
-				responses.errorResponse(res, e);
+				if (typeof e.code !== 'undefined') {
+					responses.customErrorResponse(res, e.code);
+				} else {
+					responses.errorResponse(res, e);
+				}
 			});
 
 	}
