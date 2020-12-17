@@ -114,7 +114,7 @@ module.exports = {
 			return responses.customErrorResponse(res, 602);
 		}
 
-		req.db.collection('Invitado').find().toArray()
+		req.db.collection('Invitado').find().sort({ status: 1 }).toArray()
 			.then(function (guests) {
 				return new Promise(function (resolve, reject) {
 					var model = mongoXlsx.buildDynamicModel(guests);
